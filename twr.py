@@ -23,5 +23,5 @@ if len(genres) == 0:
 print(genres)
 
 
-song = json.loads(spotify_caller.daily_rock_song_by_country(spotify_caller.get_token(), country, genres))
+song = spotify_caller.daily_rock_song_by_country(spotify_caller.get_token(), country, genres)
 print(song)
