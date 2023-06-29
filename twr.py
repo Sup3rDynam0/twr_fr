@@ -14,7 +14,7 @@ def find_country():
     country = random.choice(json.load(list))
     return country
 
-def build_tweet(item, genre):
+def build_tweet(item, genre, country):
     genre = genre
     name = item["name"]
     track_link = item["external_urls"]["spotify"]
@@ -25,7 +25,7 @@ def build_tweet(item, genre):
     album_link = item["album"]["href"]
     release_date = item["album"]["release_date"]
 
-    tweet = f"{name}\n{genre.capitalize()} from {artist}\nFeatured on the album \"{album}\" ({release_date})\nSpotify Link: {track_link}\nAnd don't forget to follow the artist here: {artist_link}"
+    tweet = f"Today's song is {name} from {country}\n{genre.capitalize()} from {artist}\nFeatured on the album \"{album}\" ({release_date})\nSpotify Link: {track_link}\nDon't forget to follow the artist here: {artist_link}"
     return tweet
 
 country = find_country()
@@ -62,7 +62,7 @@ f = open('album_art.jpg','wb')
 f.write(album_art)
 f.close()
 
-tweet_text = build_tweet(song["tracks"]["items"][0], genre)
+tweet_text = build_tweet(song["tracks"]["items"][0], genre, country["name"])
 print(tweet_text)
 
 #tweet it
