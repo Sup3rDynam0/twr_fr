@@ -40,26 +40,24 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def daily_rock_song_by_country(token, country, genres):
+def daily_rock_song_by_country(token, genre):
 
-    spotify = tk.Spotify(token)
-
-    """
+    # spotify = tk.Spotify(token)
 
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
 
-    # choose a random genre from the list
-    genre = random.choice(genres)
-
     # query spotify for a random song with this genre
-    first_query = f"?q=genre%{genre}&tag:new&type=track&limit=1&offset=0"
+    first_query = f"?q=genre%{genre}&tag:new&type=track&limit=1&offset={random.randrange(50)}"
     first_query_url = url + first_query
     first_result = get(first_query_url, headers=headers)
     song_info = json.loads(first_result.content)
 
+    return song_info
+
     # using the 'total' value from this song, we can query for a random song
 
+"""
     total = song_info['tracks']['total']
     if isinstance(total, int):
         pick = random.randrange(total)
@@ -71,6 +69,6 @@ def daily_rock_song_by_country(token, country, genres):
     result = get(query_url, headers=headers)
     song_info = json.loads(result.content)
 
-    return json.dumps(song_info, indent=4)
-
     """
+
+
