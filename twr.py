@@ -17,14 +17,15 @@ def find_country():
 def build_tweet(item, genre):
     genre = genre
     name = item["name"]
-    preview = item["preview_url"]
+    track_link = item["external_urls"]["spotify"]
     artist = item["artists"][0]["name"]
     album = item["album"]["name"]
     artist_link = item["artists"][0]["external_urls"]["spotify"]
+    preview = item["preview_url"]
     album_link = item["album"]["href"]
     release_date = item["album"]["release_date"]
 
-    tweet = f"{name}\n{genre.capitalize()} from {artist}\nFeatured on the album \"{album}\"\nPreview Link: {preview}\nAnd don't forget to follow the artist here: {artist_link}"
+    tweet = f"{name}\n{genre.capitalize()} from {artist}\nFeatured on the album \"{album}\"\nSpotify Link: {track_link}\nAnd don't forget to follow the artist here: {artist_link}"
     return tweet
 
 country = find_country()
