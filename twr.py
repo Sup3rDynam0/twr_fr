@@ -25,7 +25,7 @@ def build_tweet(item, genre, country):
     album_link = item["album"]["href"]
     release_date = item["album"]["release_date"]
 
-    tweet = f"Today's song is {name} by {artist}\n{genre.capitalize()} from {country}\nFeatured on the album \"{album}\" ({release_date})\nSpotify Link: {track_link}\nDon't forget to follow the artist here: {artist_link}"
+    tweet = f"Today's song is {name} by {artist}\n\n ~ {genre.capitalize()} from {country} ~\n\nFeatured on the album \"{album}\" ({release_date})\n\nSpotify Link: {track_link}\nDon't forget to follow the artist here: {artist_link}"
     return tweet
 
 country = find_country()
