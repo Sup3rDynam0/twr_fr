@@ -18,7 +18,7 @@ bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
 def create_tweet(tweet):
 
     client = tweepy.Client(bearer_token,consumer_key,consumer_secret,access_token,access_token_secret)
-    
+
     # prepare media
     auth = tweepy.OAuth1UserHandler(
     consumer_key, consumer_secret, access_token, access_token_secret
@@ -29,3 +29,5 @@ def create_tweet(tweet):
     tweet = tweet
     client.get_me()
     client.create_tweet(text=tweet, media_ids = [media.media_id_string])
+
+    print("Tweet successfuly posted.")
