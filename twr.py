@@ -6,6 +6,8 @@ import random
 import json
 import tekore as tk
 import requests
+import schedule
+import time
 
 # country = query_jp.daily_upg()
 
@@ -28,42 +30,58 @@ def build_tweet(item, genre, country):
     tweet = f"Today's song is {name} by {artist}\n\n ~ {genre.capitalize()} from {country} ~\n\nFeatured on the album \"{album}\" ({release_date})\n\nSpotify Link: {track_link}\nDon't forget to follow the artist here: {artist_link}"
     return tweet
 
-country = find_country()
+def twr_run():
 
-print(country['name'])
-genres = genre_scraper.find_rock_genres(country['name'])
+    country = find_country()
 
-if len(genres) == 0:
-    print("Actually, this country isn't known for its rock music.")
-    genres = genre_scraper.find_genres_by_country(''.join(country['name'].split()).lower())
+    print(country['name'])
+    genres = genre_scraper.find_rock_genres(country['name'])
+
     if len(genres) == 0:
         print("Actually, this country isn't known for its rock music.")
-        raise Exception("The Spotify API doesn't have anything to return for the chosen genre. Please run the twr.py script agan.")
+        genres = genre_scraper.find_genres_by_country(''.join(country['name'].split()).lower())
+        if len(genres) == 0:
+            print("Actually, this country isn't known for its rock music.")
+            raise Exception("The Spotify API doesn't have anything to return for the chosen genre. Please run the twr.py script agan.")
 
-print(genres)
+    print(genres)
 
-# choose a random genre from the list
-genre = random.choice(genres)
+    # choose a random genre from the list
+    genre = random.choice(genres)
 
-song = spotify_caller.daily_rock_song_by_country(spotify_caller.get_token(), genre)
-print(song["tracks"]["items"])
+    song = spotify_caller.daily_rock_song_by_country(spotify_caller.get_token(), genre)
+    print(song["tracks"]["items"])
 
-if (song["tracks"]["items"] == []):
-    raise Exception("This query resulted in no tracks being returned. This can happen from time to time, but I'm working on a fix. Please run the twr.py script again.")
+    if (song["tracks"]["items"] == []):
+        raise Exception("This query resulted in no tracks being returned. This can happen from time to time, but I'm working on a fix. Please run the twr.py script again.")
 
-# if (song["album"]["explicit"] == 'true'):
-#     raise Exception("The chosen song contains culturally insensitive or explicit lyrics. Trying to be family-friendly here. Please run the twr.py script again.")
+    # if (song["album"]["explicit"] == 'true'):
+    #     raise Exception("The chosen song contains culturally insensitive or explicit lyrics. Trying to be family-friendly here. Please run the twr.py script again.")
 
 
-# retrieve the album art and temporarily save it locally 
-album_art = requests.get(song["tracks"]["items"][0]["album"]["images"][0]["url"]).content
+    # retrieve the album art and temporarily save it locally 
+    album_art = requests.get(song["tracks"]["items"][0]["album"]["images"][0]["url"]).content
 
-f = open('album_art.jpg','wb')
-f.write(album_art)
-f.close()
+    f = open('album_art.jpg','wb')
+    f.write(album_art)
+    f.close()
 
-tweet_text = build_tweet(song["tracks"]["items"][0], genre, country["name"])
-print(tweet_text)
+    tweet_text = build_tweet(song["tracks"]["items"][0], genre, country["name"])
+    print(tweet_text)
 
-#tweet it
-twitter_caller.create_tweet(tweet_text)
+    #tweet it
+    twitter_caller.create_tweet(tweet_text)
+
+def queryRepeatedly():
+    while True:
+        try:
+            twr_run()
+        except:
+            continue
+        time.sleep(15)
+
+schedule.every().day.at("01:00").do(queryRepeatedly)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
