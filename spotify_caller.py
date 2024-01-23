@@ -7,6 +7,7 @@ import urllib.parse
 import genre_scraper
 import random
 import tekore as tk
+import pprint
 
 # special thanks to Felix Hildén and Tekore
 
@@ -21,6 +22,7 @@ client_id=os.getenv("CLIENT_ID")
 client_secret=os.getenv("CLIENT_SECRET")
 
 def get_token():
+    # pprint.pprint(dict(os.environ), width = 1)
     auth_string = client_id + ":" + client_secret
     auth_bytes = auth_string.encode("utf-8")
     auth_base64 = str(base64.b64encode(auth_bytes), "utf-8")
